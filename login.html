@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+
+<style>
+body {
+    font-family: "Segoe UI", Arial;
+    background: #eef1f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    width: 340px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    margin-bottom: 25px;
+    color: #2f3e46;
+}
+
+.input-group {
+    position: relative;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+input:focus {
+    border-color: #2f3e46;
+    outline: none;
+    box-shadow: 0 0 5px rgba(47,62,70,0.3);
+}
+
+.toggle {
+    position: absolute;
+    right: 10px;
+    top: 22px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #555;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #2f3e46;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: #354f52;
+}
+
+.error {
+    color: #d00000;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+a {
+    display: block;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #2f3e46;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Secure Login</h2>
+
+    <form action="login" method="post">
+
+        <input name="username" placeholder="Username" required>
+
+        <div class="input-group">
+            <input type="password" id="password" name="password" placeholder="Password" required>
+            <span class="toggle" onclick="togglePassword()">Show</span>
+        </div>
+
+        <button>Login</button>
+    </form>
+
+    <div class="error"></div>
+
+    <a href="register.html">Create account</a>
+</div>
+
+<script>
+function togglePassword() {
+    const pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+
+const params = new URLSearchParams(window.location.search);
+
+if (params.get("error")) {
+    document.querySelector(".error").innerText = "Invalid username or password";
+}
+
+if (params.get("logout")) {
+    document.querySelector(".error").innerText = "Logged out successfully";
+}
+</script>
+
+</body>
+</html>
