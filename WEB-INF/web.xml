@@ -45,4 +45,14 @@
 <url-pattern>/logout</url-pattern>
 </servlet-mapping>
 
+<servlet>
+    <servlet-name>DeleteLogServlet</servlet-name>
+    <servlet-class>DeleteLogServlet</servlet-class>
+</servlet>
+
+<servlet-mapping>
+    <servlet-name>DeleteLogServlet</servlet-name>
+    <url-pattern>/deleteLog</url-pattern>
+</servlet-mapping>
+
 </web-app>

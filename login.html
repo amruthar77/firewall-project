@@ -1,137 +1,186 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Login</title>
+<title>Cyber Firewall Login</title>
 
 <style>
-body {
-    font-family: "Segoe UI", Arial;
-    background: #eef1f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+
+body{
+    margin:0;
+    padding:0;
+    font-family: Consolas;
+    background:black;
+    overflow:hidden;
+    color:#00ff99;
 }
 
-.container {
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 12px;
-    width: 340px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-    text-align: center;
-    animation: fadeIn 0.5s ease-in-out;
+/* MATRIX EFFECT */
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* LOGIN BOX */
+.login-box{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:350px;
+    padding:40px;
+    background:rgba(0,0,0,0.85);
+    box-shadow:0 0 25px #00ff99;
+    border-radius:10px;
+    text-align:center;
+    z-index:10;
 }
 
-h2 {
-    margin-bottom: 25px;
-    color: #2f3e46;
+.login-box h2{
+    margin-bottom:30px;
+    color:#00ff99;
+    text-shadow:0 0 10px #00ff99;
 }
 
-.input-group {
-    position: relative;
+input{
+    width:100%;
+    padding:12px;
+    margin:12px 0;
+    background:black;
+    border:1px solid #00ff99;
+    color:#00ff99;
+    border-radius:5px;
+    outline:none;
 }
 
-input {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    transition: 0.2s;
+input:focus{
+    box-shadow:0 0 10px #00ff99;
 }
 
-input:focus {
-    border-color: #2f3e46;
-    outline: none;
-    box-shadow: 0 0 5px rgba(47,62,70,0.3);
+button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    background:#00ff99;
+    color:black;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
 }
 
-.toggle {
-    position: absolute;
-    right: 10px;
-    top: 22px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #555;
+button:hover{
+    background:#00cc77;
+    box-shadow:0 0 20px #00ff99;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background: #2f3e46;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    cursor: pointer;
-    margin-top: 10px;
+a{
+    color:#00ff99;
+    text-decoration:none;
 }
 
-button:hover {
-    background: #354f52;
+.error{
+    color:red;
+    margin-top:10px;
 }
 
-.error {
-    color: #d00000;
-    font-size: 14px;
-    margin-top: 10px;
-}
-
-a {
-    display: block;
-    margin-top: 15px;
-    font-size: 14px;
-    color: #2f3e46;
-    text-decoration: none;
-}
 </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h2>Secure Login</h2>
+<canvas id="matrix"></canvas>
 
-    <form action="login" method="post">
+<div class="login-box">
 
-        <input name="username" placeholder="Username" required>
+<h2>FIREWALL LOGIN</h2>
 
-        <div class="input-group">
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <span class="toggle" onclick="togglePassword()">Show</span>
-        </div>
+<form action="login" method="post">
 
-        <button>Login</button>
-    </form>
+<input type="text" name="username" placeholder="Username" required>
 
-    <div class="error"></div>
+<input type="password" name="password" placeholder="Password" required>
 
-    <a href="register.html">Create account</a>
+<button type="submit">LOGIN</button>
+
+</form>
+
+<div class="error"></div>
+
+<br>
+
+<a href="register.html">Create Account</a>
+
 </div>
 
 <script>
-function togglePassword() {
-    const pass = document.getElementById("password");
-    pass.type = pass.type === "password" ? "text" : "password";
+
+/* MATRIX EFFECT */
+
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const chars = "01";
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+
+const drops = [];
+
+for(let i = 0; i < columns; i++){
+    drops[i] = 1;
 }
+
+let count = 0;
+
+function draw(){
+
+    ctx.fillStyle = "rgba(0,0,0,0.08)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "#00ff99";
+    ctx.font = fontSize + "px Consolas";
+
+    for(let i = 0; i < drops.length; i++){
+
+        const text = chars.charAt(
+            Math.floor(Math.random() * chars.length)
+        );
+
+        ctx.fillText(
+            text,
+            i * fontSize,
+            drops[i] * fontSize
+        );
+
+        drops[i]++;
+
+        if(drops[i] * fontSize > canvas.height){
+            drops[i] = canvas.height/fontSize;
+        }
+    }
+
+    count++;
+
+    // STOP AFTER FEW RUNS
+    if(count > 45){
+        clearInterval(animation);
+    }
+}
+
+const animation = setInterval(draw,40);
+/* LOGIN ERROR */
 
 const params = new URLSearchParams(window.location.search);
 
-if (params.get("error")) {
-    document.querySelector(".error").innerText = "Invalid username or password";
+if(params.get("error")){
+    document.querySelector(".error").innerText =
+    "ACCESS DENIED";
 }
 
-if (params.get("logout")) {
-    document.querySelector(".error").innerText = "Logged out successfully";
-}
 </script>
 
 </body>
